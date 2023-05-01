@@ -1,0 +1,8 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/DotNetCore_MVC_CRUD_with_EFCore/.vs/DotNetCore_MVC_CRUD_with_EFCore
+/DotNetCore_MVC_CRUD_with_EFCore/DotNetCore_MVC_CRUD_with_EFCore/bin/Debug/net7.0
+/DotNetCore_MVC_CRUD_with_EFCore/DotNetCore_MVC_CRUD_with_EFCore/obj
