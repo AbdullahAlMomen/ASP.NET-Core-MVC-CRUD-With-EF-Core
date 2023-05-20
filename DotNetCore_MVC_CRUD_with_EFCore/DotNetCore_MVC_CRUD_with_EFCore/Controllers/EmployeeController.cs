@@ -9,14 +9,21 @@ namespace DotNetCore_MVC_CRUD_with_EFCore.Controllers
     public class EmployeeController : Controller
     {
         private MVCDemoDbContext _mvcDemoDbContext;
+        private readonly IEmployeeRepository _employeeRepository;
+       
+
+       
+
         public EmployeeController(MVCDemoDbContext mvcDemoDbContext)
         {
-            _mvcDemoDbContext= mvcDemoDbContext;
+            _mvcDemoDbContext = mvcDemoDbContext;
+            _employeeRepository = new EmployeeRepository(_mvcDemoDbContext);
         }
 
+        
         public async Task<IActionResult> GetEmployess()
         {
-            var employees = await _mvcDemoDbContext.Employees.ToListAsync();
+            var employees = await _employeeRepository.GetAllAsync();
             return View(employees);
         }
 
@@ -28,22 +35,22 @@ namespace DotNetCore_MVC_CRUD_with_EFCore.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(Employee employee) {
 
-           await _mvcDemoDbContext.Employees.AddAsync(employee);
-            await _mvcDemoDbContext.SaveChangesAsync();
+          await _employeeRepository.Insert(employee);
+            await _employeeRepository.Save();
             return View(employee);
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
-            var employee = await _mvcDemoDbContext.Employees.FirstOrDefaultAsync(x => x.Id == id);
+            var employee = await _employeeRepository.GetById(id);
             return View(employee);
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var employee = await _mvcDemoDbContext.Employees.FirstOrDefaultAsync(x => x.Id == id);
+            var employee = await _employeeRepository.GetById(id);
             return View(employee);
         }
 
@@ -51,27 +58,15 @@ namespace DotNetCore_MVC_CRUD_with_EFCore.Controllers
         public async Task<IActionResult> Edit(Employee employee)
         {
             
-            if (employee != null)
-            {
-                var _employee = await _mvcDemoDbContext.Employees.FirstOrDefaultAsync(x => x.Id == employee.Id);
-                _employee.Name = employee.Name;
-                _employee.Email = employee.Email;
-                _employee.Salary= employee.Salary;
-                _employee.DateOfBirthd = employee.DateOfBirthd;
-            }
-            await _mvcDemoDbContext.SaveChangesAsync();
+          await _employeeRepository.Update(employee);
+           
             return RedirectToAction("GetEmployess");
         }
         [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var employee = await _mvcDemoDbContext.Employees.FirstOrDefaultAsync(x => x.Id == id);
-            if (employee != null)
-            {
+            var employee = await _employeeRepository.GetById(id);
 
-                _mvcDemoDbContext.Employees.Remove(employee);
-
-            }
             return View(employee);
 
         }
@@ -79,16 +74,9 @@ namespace DotNetCore_MVC_CRUD_with_EFCore.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(Employee employee)
         {
-            
-            if (employee != null)
-            {
-                var _employee = await _mvcDemoDbContext.Employees.FirstOrDefaultAsync(x => x.Id == employee.Id);
 
-                _mvcDemoDbContext.Employees.Remove(_employee);
-                _mvcDemoDbContext.SaveChangesAsync();
-
-
-            }
+             _employeeRepository.Delete(employee);
+            await _employeeRepository.Save();
             return RedirectToAction("GetEmployess");
         }
     }
