@@ -9,6 +9,8 @@ namespace DotNetCore_MVC_CRUD_with_EFCore.Data
         {
         }
 
+        public MVCDemoDbContext() { }
+
         public DbSet<Employee> Employees { get; set; }
     }
 }

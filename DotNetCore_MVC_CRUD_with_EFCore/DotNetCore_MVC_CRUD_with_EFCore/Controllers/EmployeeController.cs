@@ -8,22 +8,18 @@ namespace DotNetCore_MVC_CRUD_with_EFCore.Controllers
 {
     public class EmployeeController : Controller
     {
-        private MVCDemoDbContext _mvcDemoDbContext;
-        private readonly IGenericRepository<Employee> _genericRepository;
-       
+        
+        public readonly IUnitOfWork _unitOfWork;
 
-       
-
-        public EmployeeController(MVCDemoDbContext mvcDemoDbContext)
+        public EmployeeController(IUnitOfWork unitOfWork)
         {
-            _mvcDemoDbContext = mvcDemoDbContext;
-            _genericRepository = new GenericRepository<Employee>(_mvcDemoDbContext);
+            _unitOfWork = unitOfWork;           
         }
 
-        
-        public async Task<IActionResult> GetEmployess()
+      
+        public  IActionResult GetEmployess()
         {
-            var employees = await _genericRepository.GetAll();
+            var employees =  _unitOfWork.EmployeeRepository.GetAll();
             return View(employees);
         }
 
@@ -33,39 +29,40 @@ namespace DotNetCore_MVC_CRUD_with_EFCore.Controllers
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Add(Employee employee) {
+        public IActionResult Add(Employee employee)
+        {
 
-          await _genericRepository.Insert(employee);
-            await _genericRepository.Save();
+            _unitOfWork.EmployeeRepository.Insert(employee);
+            _unitOfWork.Save();
             return View(employee);
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
-            var employee = await _genericRepository.GetById(id);
+            var employee = _unitOfWork.EmployeeRepository.GetById(id);
             return View(employee);
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            var employee = await _genericRepository.GetById(id);
+            var employee = _unitOfWork.EmployeeRepository.GetById(id);
             return View(employee);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(Employee employee)
         {
-            
-          await _genericRepository.Update(employee);
-           
+
+            await _unitOfWork.EmployeeRepository.Update(employee);
+
             return RedirectToAction("GetEmployess");
         }
         [HttpGet]
         public async Task<IActionResult> Delete(Guid id)
         {
-            var employee = await _genericRepository.GetById(id);
+            var employee = _unitOfWork.EmployeeRepository.GetById(id);
 
             return View(employee);
 
@@ -75,8 +72,8 @@ namespace DotNetCore_MVC_CRUD_with_EFCore.Controllers
         public async Task<IActionResult> Delete(Employee employee)
         {
 
-             _genericRepository.Delete(employee);
-            await _genericRepository.Save();
+            _unitOfWork.EmployeeRepository.Delete(employee);
+             _unitOfWork.Save();
             return RedirectToAction("GetEmployess");
         }
     }

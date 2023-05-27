@@ -5,46 +5,49 @@ namespace DotNetCore_MVC_CRUD_with_EFCore
 {
     public class GenericRepository<T> : IGenericRepository<T> where T : class
     {
-        private DbSet<T> table = null;
-        private readonly MVCDemoDbContext _mvcDemoDbContext;
-
-        public GenericRepository(MVCDemoDbContext mvcDemoDbContext)
+        private DbSet<T> _entities;
+        private string _errorMessage = string.Empty;
+        private bool _isDisposed;
+        
+        public readonly MVCDemoDbContext _mvcDemoDbContext;
+        public GenericRepository(MVCDemoDbContext context)
         {
-            _mvcDemoDbContext = mvcDemoDbContext;
-            table = mvcDemoDbContext.Set<T>();
+            _mvcDemoDbContext = context;
+        }
+       
+       
+        public virtual IEnumerable<T> GetAll()
+        {
+            
+            return _mvcDemoDbContext.Set<T>().ToList();
         }
 
-        public async void Delete(T entity)
+        public virtual T GetById(object id)
         {
-            table.Remove(entity);
-
+            return _mvcDemoDbContext.Set<T>().Find(id);
         }
 
-        public async Task<IEnumerable<T>> GetAll()
+        public virtual void Insert(T entity)
         {
-            return await table.ToListAsync();
+            _mvcDemoDbContext.Set<T>().Add(entity);
         }
 
-        public async Task<T> GetById(object id)
+        public virtual void Delete(T entity)
         {
-          return await table.FindAsync(id);
+            _mvcDemoDbContext.Set<T>().Remove(entity);
         }
 
-        public async Task Insert(T entity)
-        {
-           await table.AddAsync(entity);
-        }
-
-        public async Task Save()
+        public virtual async Task Save()
         {
             await _mvcDemoDbContext.SaveChangesAsync();
         }
 
-        public async Task Update(T entity)
+        public virtual async Task Update(T entity)
         {
-            table.Attach(entity);
-           _mvcDemoDbContext.Entry(entity).State= EntityState.Modified;
+            _mvcDemoDbContext.Entry(entity).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             await Save();
         }
+
+       
     }
 }
