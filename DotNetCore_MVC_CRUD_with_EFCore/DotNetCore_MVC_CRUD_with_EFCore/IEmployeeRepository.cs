@@ -2,13 +2,8 @@
 
 namespace DotNetCore_MVC_CRUD_with_EFCore
 {
-    public interface IEmployeeRepository
+    public interface IEmployeeRepository:IGenericRepository<Employee>
     {
-        Task<IEnumerable<Employee>> GetAllAsync();
-        Task<Employee> GetById(Guid EmployeeID);
-        Task Insert(Employee employee);
-        Task Update(Employee employee);
-        void  Delete(Employee employee);
-        Task Save();
+        
     }
 }

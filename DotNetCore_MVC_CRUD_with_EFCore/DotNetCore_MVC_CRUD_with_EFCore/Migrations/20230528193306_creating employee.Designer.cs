@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DotNetCore_MVC_CRUD_with_EFCore.Migrations
 {
     [DbContext(typeof(MVCDemoDbContext))]
-    [Migration("20230501161652_Initial Migration")]
-    partial class InitialMigration
+    [Migration("20230528193306_creating employee")]
+    partial class creatingemployee
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

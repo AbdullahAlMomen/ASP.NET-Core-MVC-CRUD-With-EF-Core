@@ -1,5 +1,7 @@
+using DotNetCore_MVC_CRUD_with_EFCore;
 using DotNetCore_MVC_CRUD_with_EFCore.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,7 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<MVCDemoDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("MvcDemoConnectionString")));
-
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddMvc().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

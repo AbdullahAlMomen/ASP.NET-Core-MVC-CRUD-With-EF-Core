@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace DotNetCore_MVC_CRUD_with_EFCore.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class creatingemployee : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
