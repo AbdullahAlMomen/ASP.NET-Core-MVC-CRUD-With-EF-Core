@@ -8,16 +8,12 @@ namespace DotNetCore_MVC_CRUD_with_EFCore.Controllers
 {
     public class EmployeeController : Controller
     {
-        private MVCDemoDbContext _mvcDemoDbContext;
         private readonly IEmployeeRepository _employeeRepository;
-       
 
-       
-
-        public EmployeeController(MVCDemoDbContext mvcDemoDbContext)
+        public EmployeeController(IEmployeeRepository employeeRepository)
         {
-            _mvcDemoDbContext = mvcDemoDbContext;
-            _employeeRepository = new EmployeeRepository(_mvcDemoDbContext);
+            
+            _employeeRepository = employeeRepository;
         }
 
         

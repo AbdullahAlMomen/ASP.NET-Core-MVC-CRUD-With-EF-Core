@@ -1,3 +1,4 @@
+using DotNetCore_MVC_CRUD_with_EFCore;
 using DotNetCore_MVC_CRUD_with_EFCore.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<MVCDemoDbContext>(options => 
     options.UseSqlServer(builder.Configuration.GetConnectionString("MvcDemoConnectionString")));
-
+builder.Services.AddTransient<IEmployeeRepository, EmployeeRepository>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
